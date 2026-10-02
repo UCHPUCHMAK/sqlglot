@@ -1737,6 +1737,23 @@ COMMENT='客户账户表'"""
             },
         )
 
+    def test_variance(self):
+        self.validate_identity("SELECT VAR_SAMP(a)")
+        self.validate_identity("SELECT VAR_POP(a)")
+        self.validate_identity("SELECT VARIANCE(a)", "SELECT VAR_POP(a)")
+        self.validate_identity("SELECT VARIANCE_SAMP(a)", "SELECT VAR_SAMP(a)")
+        self.validate_identity("SELECT VARIANCE_POP(a)", "SELECT VAR_POP(a)")
+        self.validate_all(
+            "SELECT VAR_SAMP(a)",
+            read={"duckdb": "SELECT VAR_SAMP(a)", "postgres": "SELECT VARIANCE(a)"},
+            write={"duckdb": "SELECT VARIANCE(a)", "postgres": "SELECT VAR_SAMP(a)"},
+        )
+        self.validate_all(
+            "SELECT VAR_POP(a)",
+            read={"duckdb": "SELECT VAR_POP(a)"},
+            write={"duckdb": "SELECT VAR_POP(a)", "postgres": "SELECT VAR_POP(a)"},
+        )
+
     def test_timestamp_trunc(self):
         hive_dialects = ("spark", "databricks")
         for dialect in ("postgres", "snowflake", *hive_dialects):

@@ -424,6 +424,16 @@ class TestStarrocks(Validator):
             "DELETE FROM t WHERE a >= 1 AND a <= 10 AND b >= 20 AND b <= 30 OR c >= 'x' AND c <= 'z'",
         )
 
+    def test_variance(self):
+        self.validate_identity("SELECT VAR_SAMP(a)")
+        self.validate_identity("SELECT VARIANCE(a)", "SELECT VAR_POP(a)")
+        self.validate_identity("SELECT VARIANCE_SAMP(a)", "SELECT VAR_SAMP(a)")
+        self.validate_all(
+            "SELECT VAR_SAMP(a)",
+            read={"duckdb": "SELECT VAR_SAMP(a)"},
+            write={"duckdb": "SELECT VARIANCE(a)"},
+        )
+
     def test_partition(self):
         # Column-based partitioning
         for cols in "col1", "col1, col2":
