@@ -132,6 +132,7 @@ class MySQLParser(parser.Parser):
         "DATABASE": exp.CurrentSchema.from_arg_list,
         "STR_TO_DATE": _str_to_date,
         "TIMESTAMPDIFF": build_date_delta(exp.TimestampDiff),
+        "VARIANCE": exp.VariancePop.from_arg_list,
         "TO_DAYS": lambda args: exp.paren(
             exp.DateDiff(
                 this=exp.TsOrDsToDate(this=seq_get(args, 0)),
