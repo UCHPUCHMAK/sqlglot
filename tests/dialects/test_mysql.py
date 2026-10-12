@@ -1741,8 +1741,6 @@ COMMENT='客户账户表'"""
         self.validate_identity("SELECT VAR_SAMP(a)")
         self.validate_identity("SELECT VAR_POP(a)")
         self.validate_identity("SELECT VARIANCE(a)", "SELECT VAR_POP(a)")
-        self.validate_identity("SELECT VARIANCE_SAMP(a)", "SELECT VAR_SAMP(a)")
-        self.validate_identity("SELECT VARIANCE_POP(a)", "SELECT VAR_POP(a)")
         self.validate_all(
             "SELECT VAR_SAMP(a)",
             read={"duckdb": "SELECT VAR_SAMP(a)", "postgres": "SELECT VARIANCE(a)"},

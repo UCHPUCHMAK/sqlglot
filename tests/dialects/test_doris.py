@@ -158,6 +158,15 @@ class TestDoris(Validator):
             },
         )
 
+    def test_variance(self):
+        self.validate_identity("SELECT VAR_SAMP(a)")
+        self.validate_identity("SELECT VARIANCE(a)", "SELECT VAR_POP(a)")
+        self.validate_all(
+            "SELECT VAR_SAMP(a)",
+            read={"postgres": "SELECT VARIANCE(a)"},
+            write={"postgres": "SELECT VAR_SAMP(a)"},
+        )
+
     def test_analyze(self):
         self.validate_identity("ANALYZE TABLE tbl")
         self.validate_identity("ANALYZE DATABASE db")
